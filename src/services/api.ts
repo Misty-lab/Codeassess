@@ -112,7 +112,10 @@ const responseErrorInterceptor = (error: AxiosError) => {
 // Auth API
 export const authApi = {
   login: async (email: string, password: string) => {
-    const response = await api.post("/auth/api/auth/login", { email, password });
+    const response = await api.post("/auth/api/auth/login", {
+      email,
+      password,
+    });
     return response.data;
   },
 
@@ -132,7 +135,9 @@ export const authApi = {
   },
 
   refreshToken: async (refreshToken: string) => {
-    const response = await api.post("/auth/api/auth/refresh-token", { refreshToken });
+    const response = await api.post("/auth/api/auth/refresh-token", {
+      refreshToken,
+    });
     return response.data;
   },
 
@@ -178,11 +183,13 @@ export const getRefreshToken = (): string | null => {
 // Application Status Enum
 export enum ApplicationStatus {
   APPLIED = "applied",
+  PENDING = "pending",
   SHORTLISTED = "shortlisted",
   INTERVIEW = "interview",
   OFFERED = "offered",
   REJECTED = "rejected",
   WITHDRAWN = "withdrawn",
+  NEED_MORE_INFO = "need_more_info",
 }
 
 // Job API
@@ -323,7 +330,9 @@ export const jobApi = {
   },
 
   approve: async (id: string, comments?: string) => {
-    const response = await api.post(`/job/api/jobs/${id}/approve`, { comments });
+    const response = await api.post(`/job/api/jobs/${id}/approve`, {
+      comments,
+    });
     return response.data;
   },
 
@@ -341,7 +350,9 @@ export const jobApi = {
   },
 
   close: async (id: string, closureReason?: string) => {
-    const response = await api.post(`/job/api/jobs/${id}/close`, { closureReason });
+    const response = await api.post(`/job/api/jobs/${id}/close`, {
+      closureReason,
+    });
     return response.data;
   },
 
@@ -355,6 +366,18 @@ export const jobApi = {
 export const applicationApi = {
   apply: async (jobId: string, data: ApplicationCreateData) => {
     const response = await api.post(`/job/api/applications/apply`, data);
+    return response.data;
+  },
+  //get all applications for a job
+  getAll: async () => {
+    const response = await api.get(`/job/api/applications`);
+    return response.data;
+  },
+
+  updateStatus: async (id: string, status: string) => {
+    const response = await api.patch(`/job/api/applications/${id}/status`, {
+      status,
+    });
     return response.data;
   },
 };

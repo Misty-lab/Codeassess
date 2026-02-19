@@ -12,6 +12,12 @@ router.post(
   ApplicationController.applyForJob,
 );
 router.get(
+  "/",
+  authenticate,
+  //authorize("candidate"),
+  ApplicationController.getAllApplications,
+);
+router.get(
   "/my-applications",
   authenticate,
   //authorize("candidate"),

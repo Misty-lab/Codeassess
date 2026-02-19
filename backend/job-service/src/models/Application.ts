@@ -3,11 +3,13 @@ import mongoose, { Document, Schema } from "mongoose";
 // Application Status Enum - Represents the lifecycle stage of a job
 export enum ApplicationStatus {
   APPLIED = "applied",
+  PENDING = "pending",
   SHORTLISTED = "shortlisted",
   INTERVIEW = "interview",
   OFFERED = "offered",
   REJECTED = "rejected",
   WITHDRAWN = "withdrawn",
+  NEED_MORE_INFO = "need_more_info",
 }
 
 export interface IApplication extends Document {

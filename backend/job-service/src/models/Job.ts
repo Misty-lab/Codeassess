@@ -1,53 +1,53 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Document, Schema } from "mongoose";
 
 /**
  * Job Status Enum - Represents the lifecycle stage of a job
  */
 export enum JobStatus {
-  DRAFT = 'draft',                    // Initial creation, not yet submitted
-  PENDING_APPROVAL = 'pending_approval', // Submitted for hiring manager approval
-  APPROVED = 'approved',              // Approved by hiring manager, ready to publish
-  PUBLISHED = 'published',           // Live on job board, accepting applications
-  CLOSED = 'closed',                 // No longer accepting applications
-  FILLED = 'filled',                 // Position has been filled
-  CANCELLED = 'cancelled'            // Job posting cancelled
+  DRAFT = "draft", // Initial creation, not yet submitted
+  PENDING_APPROVAL = "pending_approval", // Submitted for hiring manager approval
+  APPROVED = "approved", // Approved by hiring manager, ready to publish
+  PUBLISHED = "published", // Live on job board, accepting applications
+  CLOSED = "closed", // No longer accepting applications
+  FILLED = "filled", // Position has been filled
+  CANCELLED = "cancelled", // Job posting cancelled
 }
 
 /**
  * Employment Type Enum
  */
 export enum EmploymentType {
-  FULL_TIME = 'full-time',
-  PART_TIME = 'part-time',
-  CONTRACT = 'contract',
-  INTERNSHIP = 'internship',
-  TEMPORARY = 'temporary'
+  FULL_TIME = "full-time",
+  PART_TIME = "part-time",
+  CONTRACT = "contract",
+  INTERNSHIP = "internship",
+  TEMPORARY = "temporary",
 }
 
 /**
  * Work Location Type Enum
  */
 export enum WorkLocationType {
-  REMOTE = 'remote',
-  ONSITE = 'onsite',
-  HYBRID = 'hybrid'
+  REMOTE = "remote",
+  ONSITE = "onsite",
+  HYBRID = "hybrid",
 }
 
 /**
  * Job Priority Enum
  */
 export enum JobPriority {
-  LOW = 'low',
-  MEDIUM = 'medium',
-  HIGH = 'high',
-  URGENT = 'urgent'
+  LOW = "low",
+  MEDIUM = "medium",
+  HIGH = "high",
+  URGENT = "urgent",
 }
 
 /**
  * Approval Status Interface
  */
 export interface IApprovalStatus {
-  status: 'pending' | 'approved' | 'rejected' | 'not_required';
+  status: "pending" | "approved" | "rejected" | "not_required";
   approvedBy?: string; // User ID of hiring manager
   approvedAt?: Date;
   rejectedBy?: string;
@@ -60,11 +60,11 @@ export interface IApprovalStatus {
  * Compensation Interface
  */
 export interface ICompensation {
-  min?: number;        // Minimum salary/rate
-  max?: number;        // Maximum salary/rate
-  currency: string;    // e.g., 'USD', 'EUR'
-  period: 'hourly' | 'monthly' | 'yearly';
-  equity?: string;     // Equity information
+  min?: number; // Minimum salary/rate
+  max?: number; // Maximum salary/rate
+  currency: string; // e.g., 'USD', 'EUR'
+  period: "hourly" | "monthly" | "yearly";
+  equity?: string; // Equity information
   benefits?: string[]; // List of benefits
 }
 
@@ -72,13 +72,13 @@ export interface ICompensation {
  * Requirements Interface
  */
 export interface IRequirements {
-  minExperience?: number;      // Years of experience
+  minExperience?: number; // Years of experience
   maxExperience?: number;
-  education?: string[];         // Required education levels
-  certifications?: string[];    // Required certifications
-  skills: string[];           // Required skills
-  languages?: string[];        // Required languages
-  visaSponsorship?: boolean;   // Whether visa sponsorship is available
+  education?: string[]; // Required education levels
+  certifications?: string[]; // Required certifications
+  skills: string[]; // Required skills
+  languages?: string[]; // Required languages
+  visaSponsorship?: boolean; // Whether visa sponsorship is available
 }
 
 /**
@@ -88,10 +88,10 @@ export interface IApplicationSettings {
   requireCoverLetter: boolean;
   requirePortfolio: boolean;
   requireReferences: boolean;
-  maxApplications?: number;    // Maximum number of applications to accept
+  maxApplications?: number; // Maximum number of applications to accept
   autoRejectThreshold?: number; // Auto-reject if score below this
   assessmentRequired: boolean; // Whether assessment is required
-  assessmentId?: string;       // Assessment ID if required
+  assessmentId?: string; // Assessment ID if required
 }
 
 /**
@@ -101,63 +101,63 @@ export interface IJob extends Document {
   // Basic Information
   title: string;
   description: string;
-  shortDescription?: string;   // Brief summary for job board
-  
+  shortDescription?: string; // Brief summary for job board
+
   // Location & Work Type
-  location: string;            // City, State/Country
+  location: string; // City, State/Country
   workLocationType: WorkLocationType;
   employmentType: EmploymentType;
-  
+
   // Requirements
   requirements: IRequirements;
-  
+
   // Compensation
   compensation?: ICompensation;
-  
+
   // Application Settings
   applicationSettings: IApplicationSettings;
   applicationDeadline?: Date;
-  
+
   // Status & Workflow
   status: JobStatus;
   priority: JobPriority;
   approvalStatus: IApprovalStatus;
-  
+
   // Ownership & Tracking
-  createdBy: string;           // User ID who created the job
-  createdByRole: string;       // Role of creator (recruiter, hiring-manager, etc.)
-  approvedBy?: string;         // User ID who approved (hiring manager)
-  publishedBy?: string;        // User ID who published
+  createdBy: string; // User ID who created the job
+  createdByRole: string; // Role of creator (recruiter, hiring-manager, etc.)
+  approvedBy?: string; // User ID who approved (hiring manager)
+  publishedBy?: string; // User ID who published
   publishedAt?: Date;
-  
+
   // Job Board
-  publicLink?: string;         // Public URL slug
-  isActive: boolean;           // Whether job is visible on job board
-  viewsCount: number;          // Number of times job was viewed
-  applicationsCount: number;   // Number of applications received
-  
+  publicLink?: string; // Public URL slug
+  isActive: boolean; // Whether job is visible on job board
+  viewsCount: number; // Number of times job was viewed
+  applicationsCount: number; // Number of applications received
+
   // Metadata
   department?: string;
   team?: string;
-  reportingTo?: string;        // Manager/role this position reports to
-  tags?: string[];             // Tags for categorization
-  
+  reportingTo?: string; // Manager/role this position reports to
+  tags?: string[]; // Tags for categorization
+
   // Dates
   createdAt: Date;
   updatedAt: Date;
   closedAt?: Date;
   filledAt?: Date;
-  
+
   // Additional Information
   companyInfo?: {
     name?: string;
     website?: string;
     logo?: string;
   };
-  
+
   // Internal Notes (not visible to candidates)
   internalNotes?: string;
-  
+
   // Rejection/Closure Information
   closureReason?: string;
 }
@@ -166,8 +166,8 @@ const approvalStatusSchema = new Schema<IApprovalStatus>(
   {
     status: {
       type: String,
-      enum: ['pending', 'approved', 'rejected', 'not_required'],
-      default: 'not_required',
+      enum: ["pending", "approved", "rejected", "not_required"],
+      default: "not_required",
     },
     approvedBy: {
       type: String,
@@ -188,7 +188,7 @@ const approvalStatusSchema = new Schema<IApprovalStatus>(
       type: String,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const compensationSchema = new Schema<ICompensation>(
@@ -201,13 +201,13 @@ const compensationSchema = new Schema<ICompensation>(
     },
     currency: {
       type: String,
-      default: 'USD',
+      default: "USD",
       uppercase: true,
     },
     period: {
       type: String,
-      enum: ['hourly', 'monthly', 'yearly'],
-      default: 'yearly',
+      enum: ["hourly", "monthly", "yearly"],
+      default: "yearly",
     },
     equity: {
       type: String,
@@ -217,7 +217,7 @@ const compensationSchema = new Schema<ICompensation>(
       default: [],
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const requirementsSchema = new Schema<IRequirements>(
@@ -243,7 +243,7 @@ const requirementsSchema = new Schema<IRequirements>(
       required: true,
       validate: {
         validator: (v: string[]) => v.length > 0,
-        message: 'At least one skill is required',
+        message: "At least one skill is required",
       },
     },
     languages: {
@@ -255,7 +255,7 @@ const requirementsSchema = new Schema<IRequirements>(
       default: false,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const applicationSettingsSchema = new Schema<IApplicationSettings>(
@@ -289,7 +289,7 @@ const applicationSettingsSchema = new Schema<IApplicationSettings>(
       type: String,
     },
   },
-  { _id: false }
+  { _id: false },
 );
 
 const jobSchema = new Schema<IJob>(
@@ -310,7 +310,7 @@ const jobSchema = new Schema<IJob>(
       type: String,
       maxlength: 500,
     },
-    
+
     // Location & Work Type
     location: {
       type: String,
@@ -329,18 +329,18 @@ const jobSchema = new Schema<IJob>(
       required: true,
       default: EmploymentType.FULL_TIME,
     },
-    
+
     // Requirements
     requirements: {
       type: requirementsSchema,
       required: true,
     },
-    
+
     // Compensation
     compensation: {
       type: compensationSchema,
     },
-    
+
     // Application Settings
     applicationSettings: {
       type: applicationSettingsSchema,
@@ -355,14 +355,14 @@ const jobSchema = new Schema<IJob>(
     applicationDeadline: {
       type: Date,
       validate: {
-        validator: function(this: IJob, value: Date) {
+        validator: function (this: IJob, value: Date) {
           if (!value) return true; // Optional
           return value > new Date();
         },
-        message: 'Application deadline must be in the future',
+        message: "Application deadline must be in the future",
       },
     },
-    
+
     // Status & Workflow
     status: {
       type: String,
@@ -379,10 +379,10 @@ const jobSchema = new Schema<IJob>(
       type: approvalStatusSchema,
       required: true,
       default: () => ({
-        status: 'not_required',
+        status: "not_required",
       }),
     },
-    
+
     // Ownership & Tracking
     createdBy: {
       type: String,
@@ -402,7 +402,7 @@ const jobSchema = new Schema<IJob>(
     publishedAt: {
       type: Date,
     },
-    
+
     // Job Board
     publicLink: {
       type: String,
@@ -426,7 +426,7 @@ const jobSchema = new Schema<IJob>(
       default: 0,
       min: 0,
     },
-    
+
     // Metadata
     department: {
       type: String,
@@ -445,7 +445,7 @@ const jobSchema = new Schema<IJob>(
       default: [],
       index: true,
     },
-    
+
     // Dates
     closedAt: {
       type: Date,
@@ -453,19 +453,19 @@ const jobSchema = new Schema<IJob>(
     filledAt: {
       type: Date,
     },
-    
+
     // Additional Information
     companyInfo: {
       name: String,
       website: String,
       logo: String,
     },
-    
+
     // Internal Notes
     internalNotes: {
       type: String,
     },
-    
+
     // Closure Information
     closureReason: {
       type: String,
@@ -473,22 +473,22 @@ const jobSchema = new Schema<IJob>(
   },
   {
     timestamps: true,
-  }
+  },
 );
 
 // Indexes for efficient queries
 jobSchema.index({ status: 1, isActive: 1 });
 jobSchema.index({ createdBy: 1, status: 1 });
-jobSchema.index({ 'approvalStatus.status': 1 });
+jobSchema.index({ "approvalStatus.status": 1 });
 jobSchema.index({ applicationDeadline: 1 });
 jobSchema.index({ workLocationType: 1, employmentType: 1 });
-jobSchema.index({ 'requirements.skills': 1 });
+jobSchema.index({ "requirements.skills": 1 });
 jobSchema.index({ tags: 1 });
 jobSchema.index({ createdAt: -1 });
 jobSchema.index({ priority: 1, createdAt: -1 });
 
 // Virtual for generating public link
-jobSchema.virtual('publicUrl').get(function(this: IJob) {
+jobSchema.virtual("publicUrl").get(function (this: IJob) {
   if (this.publicLink) {
     return `/jobs/${this.publicLink}`;
   }
@@ -496,44 +496,46 @@ jobSchema.virtual('publicUrl').get(function(this: IJob) {
 });
 
 // Pre-save middleware to generate public link if not provided
-jobSchema.pre('save', function(next) {
+jobSchema.pre("save", function (next) {
   const doc = this as IJob & { isNew: boolean; _id: any };
   if (doc.isNew && !doc.publicLink && doc.status === JobStatus.PUBLISHED) {
     // Generate slug from title
     const slug = doc.title
       .toLowerCase()
-      .replace(/[^a-z0-9]+/g, '-')
-      .replace(/(^-|-$)/g, '');
+      .replace(/[^a-z0-9]+/g, "-")
+      .replace(/(^-|-$)/g, "");
     doc.publicLink = `${slug}-${doc._id.toString().slice(-6)}`;
   }
   next();
 });
 
 // Method to check if job is accepting applications
-jobSchema.methods.isAcceptingApplications = function(this: IJob): boolean {
+jobSchema.methods.isAcceptingApplications = function (this: IJob): boolean {
   if (this.status !== JobStatus.PUBLISHED || !this.isActive) {
     return false;
   }
   if (this.applicationDeadline && this.applicationDeadline < new Date()) {
     return false;
   }
-  if (this.applicationSettings.maxApplications && 
-      this.applicationsCount >= this.applicationSettings.maxApplications) {
+  if (
+    this.applicationSettings.maxApplications &&
+    this.applicationsCount >= this.applicationSettings.maxApplications
+  ) {
     return false;
   }
   return true;
 };
 
 // Method to increment views
-jobSchema.methods.incrementViews = function(this: IJob & Document) {
+jobSchema.methods.incrementViews = function (this: IJob & Document) {
   this.viewsCount += 1;
   return this.save();
 };
 
 // Method to increment applications
-jobSchema.methods.incrementApplications = function(this: IJob & Document) {
+jobSchema.methods.incrementApplications = function (this: IJob & Document) {
   this.applicationsCount += 1;
   return this.save();
 };
 
-export const Job = mongoose.model<IJob>('Job', jobSchema);
+export const Job = mongoose.model<IJob>("Job", jobSchema);

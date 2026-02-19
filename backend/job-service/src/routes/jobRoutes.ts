@@ -1,75 +1,72 @@
-import { Router } from 'express';
-import { JobController } from '../controllers/jobController';
-import { authenticate, authorize } from '../middleware/auth';
-import { validate, jobSchemas } from '../middleware/validation';
+import { Router } from "express";
+import { JobController } from "../controllers/jobController";
+import { authenticate, authorize } from "../middleware/auth";
+import { validate, jobSchemas } from "../middleware/validation";
 
 const router = Router();
 
 // Public routes (no authentication required)
-router.get('/public', JobController.getPublicJobs);
-router.get('/public/:link', JobController.getJobByPublicLink);
+router.get("/public", JobController.getPublicJobs);
+router.get("/public/:link", JobController.getJobByPublicLink);
 
 // Protected routes - Job CRUD
-router.get('/',authenticate, JobController.getJobs);
-router.get('/stats', authenticate, JobController.getJobStats);
-router.get('/:id', authenticate, JobController.getJobById);
+router.get("/", authenticate, JobController.getJobs);
+router.get("/stats", authenticate, JobController.getJobStats);
+router.get("/:id", authenticate, JobController.getJobById);
 router.post(
-  '/',
+  "/",
   authenticate,
-  authorize('recruiter', 'hiring-manager', 'admin'),
+  authorize("recruiter", "hiring-manager", "admin"),
   validate(jobSchemas.create),
-  JobController.createJob
+  JobController.createJob,
 );
 router.put(
-  '/:id',
+  "/:id",
   authenticate,
-  authorize('recruiter', 'hiring-manager', 'admin'),
+  authorize("recruiter", "hiring-manager", "admin"),
   validate(jobSchemas.update),
-  JobController.updateJob
+  JobController.updateJob,
 );
 router.delete(
-  '/:id',
+  "/:id",
   authenticate,
-  authorize('recruiter', 'hiring-manager', 'admin'),
-  JobController.deleteJob
+  authorize("recruiter", "hiring-manager", "admin"),
+  JobController.deleteJob,
 );
 
 // Approval workflow routes
 router.post(
-  '/:id/submit',
+  "/:id/submit",
   authenticate,
-  authorize('recruiter', 'hiring-manager', 'admin'),
+  authorize("recruiter", "hiring-manager", "admin"),
   validate(jobSchemas.submit),
-  JobController.submitForApproval
+  JobController.submitForApproval,
 );
 router.post(
-  '/:id/approve',
+  "/:id/approve",
   authenticate,
-  authorize('hiring-manager', 'admin'),
+  authorize("hiring-manager", "admin"),
   validate(jobSchemas.approve),
-  JobController.approveJob
+  JobController.approveJob,
 );
 router.post(
-  '/:id/reject',
+  "/:id/reject",
   authenticate,
-  authorize('hiring-manager', 'admin'),
+  authorize("hiring-manager", "admin"),
   validate(jobSchemas.reject),
-  JobController.rejectJob
+  JobController.rejectJob,
 );
 router.post(
-  '/:id/publish',
+  "/:id/publish",
   authenticate,
-  authorize('recruiter', 'admin'),
-  JobController.publishJob
+  authorize("recruiter", "admin"),
+  JobController.publishJob,
 );
 router.post(
-  '/:id/close',
+  "/:id/close",
   authenticate,
-  authorize('recruiter', 'hiring-manager', 'admin'),
-  JobController.closeJob
+  authorize("recruiter", "hiring-manager", "admin"),
+  JobController.closeJob,
 );
-
-
 
 export default router;
-

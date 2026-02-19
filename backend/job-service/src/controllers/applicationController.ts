@@ -172,4 +172,22 @@ export class ApplicationController {
       next(error);
     }
   }
+
+  //get all applications
+  static async getAllApplications(
+    req: AuthRequest,
+    res: Response,
+    next: NextFunction,
+  ): Promise<void> {
+    try {
+      const applications = await Application.find().sort({ createdAt: -1 });
+
+      res.status(200).json({
+        success: true,
+        data: applications,
+      });
+    } catch (error) {
+      next(error);
+    }
+  }
 }
